@@ -1,0 +1,56 @@
+# Xida Ren
+# CS 304
+# This program squares a number in two ways
+# Array at position 0x100 contains results
+# array[0] is operand i
+# array[1] is result of squareadd, with O(i) performance
+# array[2] is result of squarebit, with O(log(i)) performance
+.pos 0x0
+InitOperand:
+                irmovl array, %ecx  # tmp = array
+                irmovl $19, %edi    # edi = i
+                rmmovl %edi, (%ecx) # arr[0] = i
+addInit:        
+                irmovl array, %ecx  # 
+                mrmovl (%ecx), %edi
+                xorl   %eax, %eax # ret = 0
+                xorl   %ebx, %ebx # j = 0
+                jmp    addLoopTest
+addLoopBody:
+                addl   %edi, %eax  # ret += i
+                irmovl $1  , %ecx  # tpm = 1
+                addl   %ecx, %ebx  # j += 1
+addLoopTest:
+                rrmovl %edi, %ecx  # tmp = i
+                subl   %ebx, %ecx  # tmp -= j
+                jg     addLoopBody # loop
+addLoopEnd:
+                irmovl array, %ecx # tmp = array
+                rmmovl %eax, 4(%ecx)
+# begin addbits
+bitInit:
+                irmovl array, %ecx # tmp = *array
+                mrmovl (%ecx), %edi
+                xorl   %eax, %eax  # ret = 0
+                irmovl $1,   %ebx    # bit = 1
+                rrmovl %edi, %ecx  # mult= i
+                jmp    bitLoopTest
+bitLoopBody:
+                rrmovl %edi, %edx  # tmp = i
+                andl   %ebx, %edx
+                je     bitLoopDbl
+bitLoopAdd:
+                addl   %ecx, %eax
+bitLoopDbl:
+                addl   %ebx, %ebx
+                addl   %ecx, %ecx
+bitLoopTest:
+                rrmovl %edi, %edx  # tmp = i
+                subl   %ebx, %edx  # tmp -=bit
+                jge    bitLoopBody # loop until bit greater than i
+bitLoopEnd:
+                irmovl array, %ecx # tmp = array
+                rmmovl %eax, 8(%ecx)
+
+.pos 0x100
+array:
