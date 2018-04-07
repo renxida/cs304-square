@@ -6,10 +6,13 @@
 # array[1] is result of squareadd, with O(i) performance
 # array[2] is result of squarebit, with O(log(i)) performance
 .pos 0x0
-InitOperand:
-                irmovl array, %ecx  # tmp = array
-                irmovl $19, %edi    # edi = i
-                rmmovl %edi, (%ecx) # arr[0] = i
+jmp addInit
+
+.align 4
+array:
+                .long  19
+                .long  0
+                .long  0
 addInit:        
                 irmovl array, %ecx  # 
                 mrmovl (%ecx), %edi
@@ -51,6 +54,3 @@ bitLoopTest:
 bitLoopEnd:
                 irmovl array, %ecx # tmp = array
                 rmmovl %eax, 8(%ecx)
-
-.pos 0x100
-array:
