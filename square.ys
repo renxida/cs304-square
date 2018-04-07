@@ -13,9 +13,10 @@ array:
                 .long  0
                 .long  0
                 .long  0
+
 OperandInit:
 		irmovl array, %ecx # load array address
-		irmovl $35, %eax
+		irmovl $19, %eax
 		rmmovl %eax, (%ecx)
 		
 addInit:        
