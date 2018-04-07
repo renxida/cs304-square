@@ -6,13 +6,18 @@
 # array[1] is result of squareadd, with O(i) performance
 # array[2] is result of squarebit, with O(log(i)) performance
 .pos 0x0
-jmp addInit
+jmp OperandInit
 
 .align 4
 array:
-                .long  19
                 .long  0
                 .long  0
+                .long  0
+OperandInit:
+		irmovl array, %ecx # load array address
+		irmovl $35, %eax
+		rmmovl %eax, (%ecx)
+		
 addInit:        
                 irmovl array, %ecx  # 
                 mrmovl (%ecx), %edi
